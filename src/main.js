@@ -3,7 +3,7 @@ import { RenderingEngine, Enums as coreEnums, init as coreInit } from '@cornerst
 import { init as dicomInit, wadouri } from '@cornerstonejs/dicom-image-loader';
 import {
   init as toolsInit, addTool, ToolGroupManager, Enums as toolsEnums,
-  WindowLevelTool, PanTool, ZoomTool, StackScrollMouseWheelTool,
+  WindowLevelTool, PanTool, ZoomTool, StackScrollTool,
 } from '@cornerstonejs/tools';
 import { inspectFiles } from './dicom.js';
 import { groupSeries } from './series.js';
@@ -42,14 +42,14 @@ function initViewer() {
     await coreInit();
     await dicomInit({ maxWebWorkers: 2 });
     await toolsInit();
-    for (const tool of [WindowLevelTool, PanTool, ZoomTool, StackScrollMouseWheelTool]) addTool(tool);
+    for (const tool of [WindowLevelTool, PanTool, ZoomTool, StackScrollTool]) addTool(tool);
     engine = new RenderingEngine(ENGINE_ID);
     engine.enableElement({ viewportId: VIEWPORT_ID, type: coreEnums.ViewportType.STACK, element: $('viewer') });
     viewport = engine.getViewport(VIEWPORT_ID);
     group = ToolGroupManager.createToolGroup(GROUP_ID);
-    for (const tool of [WindowLevelTool, PanTool, ZoomTool, StackScrollMouseWheelTool]) group.addTool(tool.toolName);
+    for (const tool of [WindowLevelTool, PanTool, ZoomTool, StackScrollTool]) group.addTool(tool.toolName);
     group.addViewport(VIEWPORT_ID, ENGINE_ID);
-    group.setToolActive(StackScrollMouseWheelTool.toolName);
+    group.setToolActive(StackScrollTool.toolName, { bindings: [{ mouseButton: toolsEnums.MouseBindings.Wheel }] });
     setMode(mode);
     window.addEventListener('resize', () => engine?.resize(true, false));
   })().catch((error) => {
