@@ -1,0 +1,21 @@
+{
+  "name": "vera-dicom-pwa",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build && node scripts/precache.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@cornerstonejs/core": "5.8.2",
+    "@cornerstonejs/dicom-image-loader": "5.8.2",
+    "@cornerstonejs/tools": "5.8.2",
+    "dicom-parser": "^1.8.21"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0"
+  }
+}
