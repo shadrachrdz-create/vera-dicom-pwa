@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#102f29" />
+  <meta name="description" content="Visualización local de series DICOM en tablet. Prototipo no certificado." />
+  <meta name="referrer" content="no-referrer" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; img-src 'self' blob: data:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none';" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icons/icon-192.png" />
+  <title>VERA DICOM · Visor local</title>
+</head>
+<body>
+  <div id="app">
+    <header class="masthead">
+      <div class="brand"><span class="monogram">VD</span><div><strong>VERA DICOM</strong><small>Visor local de imágenes médicas</small></div></div>
+      <div class="pill">Prototipo · No diagnóstico</div>
+    </header>
+    <main>
+      <section class="topbar" aria-label="Importar estudios">
+        <div class="imports">
+          <button id="openFiles" class="primary" type="button">Abrir archivos DICOM</button>
+          <button id="openFolder" type="button">Abrir carpeta</button>
+          <button id="resetApp" class="muted" type="button">Cerrar estudio</button>
+          <input id="filesInput" type="file" multiple hidden />
+          <input id="folderInput" type="file" webkitdirectory directory multiple hidden />
+        </div>
+        <div class="series-control"><label for="seriesSelect">Serie</label><select id="seriesSelect" disabled><option>Sin estudio</option></select></div>
+      </section>
+
+      <section class="workstation" aria-label="Visualizador DICOM">
+        <div class="viewer-shell" id="viewerShell">
+          <div class="viewer-meta"><span id="seriesDetails">Seleccione archivos .dcm o una carpeta DICOM</span><span id="imageIndex">—</span></div>
+          <div id="viewer" aria-label="Imagen médica DICOM" role="img"></div>
+          <div id="emptyMessage" class="empty-message"><div class="empty-icon">✧</div><strong>Estudio no cargado</strong><p>Selecciona los archivos DICOM desde el almacenamiento de la tablet. Los estudios se procesan localmente.</p></div>
+          <div class="viewer-foot"><span id="scanInfo">Sin imagen</span><span id="toolInfo">Modo: ventana / nivel</span></div>
+        </div>
+        <aside class="controls" aria-label="Herramientas del visor">
+          <div class="section-head">Herramientas táctiles</div>
+          <div class="modes" role="group" aria-label="Modo de interacción">
+            <button type="button" data-mode="window" class="is-selected">Ventana / nivel</button>
+            <button type="button" data-mode="pan">Desplazar</button>
+            <button type="button" data-mode="zoom">Zoom</button>
+          </div>
+          <div class="section-head">Ventanas de TC</div>
+          <div class="preset-grid">
+            <button type="button" data-preset="soft">Tejidos blandos</button>
+            <button type="button" data-preset="lung">Pulmón</button>
+            <button type="button" data-preset="bone">Hueso</button>
+            <button type="button" data-preset="brain">Cerebro</button>
+          </div>
+          <div class="field-grid">
+            <label>Centro (HU)<input id="wwCenter" inputmode="decimal" type="number" value="40" /></label>
+            <label>Ancho (HU)<input id="wwWidth" inputmode="decimal" type="number" min="1" value="400" /></label>
+          </div>
+          <div class="actions"><button type="button" id="applyWindow">Aplicar ventana</button><button type="button" id="resetView">Ajustar vista</button><button type="button" id="fullScreen">Pantalla completa</button></div>
+          <div class="help">Un dedo: herramienta seleccionada. Dos dedos: zoom. Rueda del ratón o barra inferior: cambiar corte. Arrastra los controles para ajustar una imagen.</div>
+        </aside>
+      </section>
+
+      <section class="navigation" aria-label="Navegación entre cortes">
+        <button id="prevImage" disabled type="button" aria-label="Corte anterior">◀</button>
+        <input id="sliceSlider" type="range" min="0" max="0" value="0" disabled aria-label="Número de corte" />
+        <button id="nextImage" disabled type="button" aria-label="Corte siguiente">▶</button>
+      </section>
+      <p id="status" class="status" role="status" aria-live="polite">Listo para importar un estudio. No se transmiten archivos a ningún servidor.</p>
+      <p class="notice">Prototipo de visualización. No está validado para diagnóstico ni sustituye un PACS/visor certificado. Verifique orientación, calibración, integridad y totalidad de las imágenes antes de cualquier interpretación clínica.</p>
+    </main>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
