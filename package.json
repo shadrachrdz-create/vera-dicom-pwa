@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "vite build && node scripts/precache.mjs",
+    "build": "node scripts/generate-icons.mjs && vite build && node scripts/precache.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "test": "node --test"
   },
